@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TicketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BlockList">
+    <Key>
+      <PropertyRef Name="BlockListID" />
+    </Key>
+    <Property Name="BlockListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Ticket_Activity">
+    <Key>
+      <PropertyRef Name="ActivityID" />
+    </Key>
+    <Property Name="ActivityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TicketID" Type="Int32" Nullable="false" />
+    <Property Name="ActivityType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Summary" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ActivityDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ActedBy" Type="Int32" />
+    <Property Name="ActorName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Unread" Type="Boolean" />
+    <NavigationProperty Name="Ticket_Master" Relationship="Self.FK_Ticket_Master_Ticket_Master" FromRole="Ticket_Activity" ToRole="Ticket_Master" />
+  </EntityType>
+  <EntityType Name="Ticket_Collaborator">
+    <Key>
+      <PropertyRef Name="CollaboratorID" />
+    </Key>
+    <Property Name="CollaboratorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TicketID" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FullName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="FieldType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Ticket_Master" Relationship="Self.FK_Ticket_Collaborator_Ticket_Master" FromRole="Ticket_Collaborator" ToRole="Ticket_Master" />
+  </EntityType>
+  <EntityType Name="Ticket_Master">
+    <Key>
+      <PropertyRef Name="TicketID" />
+    </Key>
+    <Property Name="TicketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FullName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TicketSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="AssignTo" Type="Int32" />
+    <Property Name="TicketStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Priority" Type="Byte" />
+    <Property Name="ClosedBy" Type="Int32" />
+    <Property Name="ClosedDate" Type="DateTime" Precision="3" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="AcknowledgementSent" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Ticket_Activity" Relationship="Self.FK_Ticket_Master_Ticket_Master" FromRole="Ticket_Master" ToRole="Ticket_Activity" />
+    <NavigationProperty Name="Ticket_Collaborator" Relationship="Self.FK_Ticket_Collaborator_Ticket_Master" FromRole="Ticket_Master" ToRole="Ticket_Collaborator" />
+  </EntityType>
+  <Association Name="FK_Ticket_Master_Ticket_Master">
+    <End Role="Ticket_Master" Type="Self.Ticket_Master" Multiplicity="1" />
+    <End Role="Ticket_Activity" Type="Self.Ticket_Activity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ticket_Master">
+        <PropertyRef Name="TicketID" />
+      </Principal>
+      <Dependent Role="Ticket_Activity">
+        <PropertyRef Name="TicketID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ticket_Collaborator_Ticket_Master">
+    <End Role="Ticket_Master" Type="Self.Ticket_Master" Multiplicity="1" />
+    <End Role="Ticket_Collaborator" Type="Self.Ticket_Collaborator" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ticket_Master">
+        <PropertyRef Name="TicketID" />
+      </Principal>
+      <Dependent Role="Ticket_Collaborator">
+        <PropertyRef Name="TicketID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TicketEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BlockLists" EntityType="Self.BlockList" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Ticket_Activity" EntityType="Self.Ticket_Activity" />
+    <EntitySet Name="Ticket_Collaborator" EntityType="Self.Ticket_Collaborator" />
+    <EntitySet Name="Ticket_Master" EntityType="Self.Ticket_Master" />
+    <AssociationSet Name="FK_Ticket_Master_Ticket_Master" Association="Self.FK_Ticket_Master_Ticket_Master">
+      <End Role="Ticket_Master" EntitySet="Ticket_Master" />
+      <End Role="Ticket_Activity" EntitySet="Ticket_Activity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ticket_Collaborator_Ticket_Master" Association="Self.FK_Ticket_Collaborator_Ticket_Master">
+      <End Role="Ticket_Master" EntitySet="Ticket_Master" />
+      <End Role="Ticket_Collaborator" EntitySet="Ticket_Collaborator" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

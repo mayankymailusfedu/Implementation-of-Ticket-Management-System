@@ -1,0 +1,12 @@
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\bin\Debug\MailWindowsService.exe.config
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\bin\Debug\MailWindowsService.exe
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\bin\Debug\MailWindowsService.pdb
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\bin\Debug\EntityFramework.dll
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\bin\Debug\ImapX.dll
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\bin\Debug\EntityFramework.xml
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\obj\Debug\MailWindowsService.csproj.CoreCompileInputs.cache
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\obj\Debug\MailWindowsService.exe
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\obj\Debug\MailWindowsService.pdb
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\obj\Debug\MailWindowsService.ProjectInstaller.resources
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\obj\Debug\MailWindowsService.csproj.GenerateResource.Cache
+E:\Education\Graduate\Sem 2\NP\VS Projects\MailWindowsService\MailWindowsService\obj\Debug\MailWindowsService.csprojResolveAssemblyReference.cache

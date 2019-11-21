@@ -1,0 +1,360 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TicketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BlockList">
+          <Key>
+            <PropertyRef Name="BlockListID" />
+          </Key>
+          <Property Name="BlockListID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Client_ID" />
+          </Key>
+          <Property Name="Client_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="StreetAddress1" Type="nvarchar" MaxLength="500" />
+          <Property Name="StreetAddress2" Type="nvarchar" MaxLength="500" />
+          <Property Name="City" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="500" />
+          <Property Name="Country" Type="nvarchar" MaxLength="500" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="Staff_ID" />
+          </Key>
+          <Property Name="Staff_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ticket_Activity">
+          <Key>
+            <PropertyRef Name="ActivityID" />
+          </Key>
+          <Property Name="ActivityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TicketID" Type="int" Nullable="false" />
+          <Property Name="ActivityType" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Summary" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ActivityDate" Type="datetime" Nullable="false" />
+          <Property Name="ActedBy" Type="int" />
+          <Property Name="ActorName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Unread" Type="bit" />
+        </EntityType>
+        <EntityType Name="Ticket_Collaborator">
+          <Key>
+            <PropertyRef Name="CollaboratorID" />
+          </Key>
+          <Property Name="CollaboratorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TicketID" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="500" />
+          <Property Name="FieldType" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Ticket_Master">
+          <Key>
+            <PropertyRef Name="TicketID" />
+          </Key>
+          <Property Name="TicketID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="500" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" />
+          <Property Name="TicketSource" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="Subject" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AssignTo" Type="int" />
+          <Property Name="TicketStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Priority" Type="tinyint" />
+          <Property Name="ClosedBy" Type="int" />
+          <Property Name="ClosedDate" Type="datetime" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="AcknowledgementSent" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Ticket_Collaborator_Ticket_Master">
+          <End Role="Ticket_Master" Type="Self.Ticket_Master" Multiplicity="1" />
+          <End Role="Ticket_Collaborator" Type="Self.Ticket_Collaborator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket_Master">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="Ticket_Collaborator">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Master_Ticket_Master">
+          <End Role="Ticket_Master" Type="Self.Ticket_Master" Multiplicity="1" />
+          <End Role="Ticket_Activity" Type="Self.Ticket_Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket_Master">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="Ticket_Activity">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TicketModelStoreContainer">
+          <EntitySet Name="BlockList" EntityType="Self.BlockList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket_Activity" EntityType="Self.Ticket_Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket_Collaborator" EntityType="Self.Ticket_Collaborator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket_Master" EntityType="Self.Ticket_Master" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Ticket_Collaborator_Ticket_Master" Association="Self.FK_Ticket_Collaborator_Ticket_Master">
+            <End Role="Ticket_Master" EntitySet="Ticket_Master" />
+            <End Role="Ticket_Collaborator" EntitySet="Ticket_Collaborator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Master_Ticket_Master" Association="Self.FK_Ticket_Master_Ticket_Master">
+            <End Role="Ticket_Master" EntitySet="Ticket_Master" />
+            <End Role="Ticket_Activity" EntitySet="Ticket_Activity" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TicketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BlockList">
+          <Key>
+            <PropertyRef Name="BlockListID" />
+          </Key>
+          <Property Name="BlockListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Client_ID" />
+          </Key>
+          <Property Name="Client_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StreetAddress1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="StreetAddress2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="Staff_ID" />
+          </Key>
+          <Property Name="Staff_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ticket_Activity">
+          <Key>
+            <PropertyRef Name="ActivityID" />
+          </Key>
+          <Property Name="ActivityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TicketID" Type="Int32" Nullable="false" />
+          <Property Name="ActivityType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Summary" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActivityDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ActedBy" Type="Int32" />
+          <Property Name="ActorName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Unread" Type="Boolean" />
+          <NavigationProperty Name="Ticket_Master" Relationship="Self.FK_Ticket_Master_Ticket_Master" FromRole="Ticket_Activity" ToRole="Ticket_Master" />
+        </EntityType>
+        <EntityType Name="Ticket_Collaborator">
+          <Key>
+            <PropertyRef Name="CollaboratorID" />
+          </Key>
+          <Property Name="CollaboratorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TicketID" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FieldType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Ticket_Master" Relationship="Self.FK_Ticket_Collaborator_Ticket_Master" FromRole="Ticket_Collaborator" ToRole="Ticket_Master" />
+        </EntityType>
+        <EntityType Name="Ticket_Master">
+          <Key>
+            <PropertyRef Name="TicketID" />
+          </Key>
+          <Property Name="TicketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TicketSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AssignTo" Type="Int32" />
+          <Property Name="TicketStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Priority" Type="Byte" />
+          <Property Name="ClosedBy" Type="Int32" />
+          <Property Name="ClosedDate" Type="DateTime" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="AcknowledgementSent" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Ticket_Activity" Relationship="Self.FK_Ticket_Master_Ticket_Master" FromRole="Ticket_Master" ToRole="Ticket_Activity" />
+          <NavigationProperty Name="Ticket_Collaborator" Relationship="Self.FK_Ticket_Collaborator_Ticket_Master" FromRole="Ticket_Master" ToRole="Ticket_Collaborator" />
+        </EntityType>
+        <Association Name="FK_Ticket_Master_Ticket_Master">
+          <End Role="Ticket_Master" Type="Self.Ticket_Master" Multiplicity="1" />
+          <End Role="Ticket_Activity" Type="Self.Ticket_Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket_Master">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="Ticket_Activity">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Collaborator_Ticket_Master">
+          <End Role="Ticket_Master" Type="Self.Ticket_Master" Multiplicity="1" />
+          <End Role="Ticket_Collaborator" Type="Self.Ticket_Collaborator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket_Master">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="Ticket_Collaborator">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TicketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BlockLists" EntityType="Self.BlockList" />
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="Ticket_Activity" EntityType="Self.Ticket_Activity" />
+          <EntitySet Name="Ticket_Collaborator" EntityType="Self.Ticket_Collaborator" />
+          <EntitySet Name="Ticket_Master" EntityType="Self.Ticket_Master" />
+          <AssociationSet Name="FK_Ticket_Master_Ticket_Master" Association="Self.FK_Ticket_Master_Ticket_Master">
+            <End Role="Ticket_Master" EntitySet="Ticket_Master" />
+            <End Role="Ticket_Activity" EntitySet="Ticket_Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Collaborator_Ticket_Master" Association="Self.FK_Ticket_Collaborator_Ticket_Master">
+            <End Role="Ticket_Master" EntitySet="Ticket_Master" />
+            <End Role="Ticket_Collaborator" EntitySet="Ticket_Collaborator" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TicketModelStoreContainer" CdmEntityContainer="TicketEntities">
+          <EntitySetMapping Name="BlockLists">
+            <EntityTypeMapping TypeName="TicketModel.BlockList">
+              <MappingFragment StoreEntitySet="BlockList">
+                <ScalarProperty Name="BlockListID" ColumnName="BlockListID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="TicketModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Client_ID" ColumnName="Client_ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="StreetAddress1" ColumnName="StreetAddress1" />
+                <ScalarProperty Name="StreetAddress2" ColumnName="StreetAddress2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staffs">
+            <EntityTypeMapping TypeName="TicketModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="Staff_ID" ColumnName="Staff_ID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ticket_Activity">
+            <EntityTypeMapping TypeName="TicketModel.Ticket_Activity">
+              <MappingFragment StoreEntitySet="Ticket_Activity">
+                <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+                <ScalarProperty Name="ActivityType" ColumnName="ActivityType" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActivityDate" ColumnName="ActivityDate" />
+                <ScalarProperty Name="ActedBy" ColumnName="ActedBy" />
+                <ScalarProperty Name="ActorName" ColumnName="ActorName" />
+                <ScalarProperty Name="Unread" ColumnName="Unread" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ticket_Collaborator">
+            <EntityTypeMapping TypeName="TicketModel.Ticket_Collaborator">
+              <MappingFragment StoreEntitySet="Ticket_Collaborator">
+                <ScalarProperty Name="CollaboratorID" ColumnName="CollaboratorID" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="FieldType" ColumnName="FieldType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ticket_Master">
+            <EntityTypeMapping TypeName="TicketModel.Ticket_Master">
+              <MappingFragment StoreEntitySet="Ticket_Master">
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="TicketSource" ColumnName="TicketSource" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="AssignTo" ColumnName="AssignTo" />
+                <ScalarProperty Name="TicketStatus" ColumnName="TicketStatus" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="ClosedBy" ColumnName="ClosedBy" />
+                <ScalarProperty Name="ClosedDate" ColumnName="ClosedDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="AcknowledgementSent" ColumnName="AcknowledgementSent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
